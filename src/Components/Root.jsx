@@ -4,6 +4,7 @@ import { Outlet } from 'react-router';
 import Foot from './Foot';
 
 const Root = () => {
+
     return (
         <div >
             <Nav></Nav>
