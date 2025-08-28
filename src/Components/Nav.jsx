@@ -8,26 +8,37 @@ const Nav = () => {
   const navigate = useNavigate();
 
   const logout = () => {
-    handleLogout()
-      .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Logged Out",
-          text: "You have been successfully logged out.",
-          timer: 2000,
-          showConfirmButton: false,
-        });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleLogout()
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Logged Out",
+              text: "You have been successfully logged out.",
+              timer: 2000,
+              showConfirmButton: false,
+            });
 
-        navigate('/');
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Logout Failed",
-          text: error.message,
-          confirmButtonText: "Try Again",
-        });
-      });
+            navigate("/");
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Logout Failed",
+              text: error.message,
+              confirmButtonText: "Try Again",
+            });
+          });
+      }
+    });
   };
 
   return (

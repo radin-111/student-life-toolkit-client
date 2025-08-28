@@ -30,8 +30,8 @@ const Social = () => {
 
   const handleGithubSignIn = () => {
     githubSignIn()
-      .then((r) => {
-        console.log(r.user)
+      .then(() => {
+        
         Swal.fire({
           icon: "success",
           title: "Success!",

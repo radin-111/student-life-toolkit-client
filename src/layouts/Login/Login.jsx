@@ -1,17 +1,40 @@
-import React from "react";
-import { FaGoogle, FaGithub } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
 import Social from "../../Components/Social";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Login() {
-  const { user } = useAuth();
+  const { user, handleLogin } = useAuth();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
   setTimeout(() => {
     if (user) {
       navigate("/");
     }
   }, 1000);
+  const login = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    handleLogin(email, password)
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Authenticated successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((e) => {
+        toast.error(e.message);
+      });
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-base-200 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
@@ -19,7 +42,7 @@ export default function Login() {
         <h2 className="text-3xl font-bold text-center mb-6">Login</h2>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={login}>
           {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium mb-1">
@@ -35,7 +58,7 @@ export default function Login() {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
             <label
               htmlFor="password"
               className="block text-sm font-medium mb-1"
@@ -43,12 +66,18 @@ export default function Login() {
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               placeholder="Enter your password"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
+            <span
+              className="absolute right-3 top-9 cursor-pointer text-gray-500"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
 
           {/* Forgot Password + Remember Me */}
@@ -82,16 +111,14 @@ export default function Login() {
         <Social></Social>
 
         {/* Register Link */}
-        <p className="text-sm text-center mt-6">
-          Don’t have an account?{" "}
-          <a
-            href="/register"
-            className="text-primary font-medium hover:underline"
-          >
-            Sign up
-          </a>
-        </p>
+        <Link
+          to="/register"
+          className="text-sm text-center mt-6  font-medium hover:underline text-primary"
+        >
+          Don’t have an account? Sign up
+        </Link>
       </div>
+      <ToastContainer />
     </div>
   );
 }
