@@ -1,6 +1,35 @@
 import React from "react";
+import { useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Nav = () => {
+  const { user, handleLogout } = useAuth();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    handleLogout()
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Logged Out",
+          text: "You have been successfully logged out.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
+        navigate('/');
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Logout Failed",
+          text: error.message,
+          confirmButtonText: "Try Again",
+        });
+      });
+  };
+
   return (
     // https://i.ibb.co.com/s9J7m3XX/image-1.jpg
     <div className="navbar bg-base-100 lg:px-10 shadow-sm">
@@ -47,7 +76,11 @@ const Nav = () => {
           </ul>
         </div>
         <div className="flex gap-1 items-center">
-          <img src="https://i.ibb.co.com/s9J7m3XX/image-1.jpg" className="w-[50px] h-[50px] rounded" alt="" />
+          <img
+            src="https://i.ibb.co.com/s9J7m3XX/image-1.jpg"
+            className="w-[50px] h-[50px] rounded"
+            alt=""
+          />
           <p className="font-bold italic">HappyLearn</p>
         </div>
       </div>
@@ -74,10 +107,36 @@ const Nav = () => {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
-        <button className="btn btn-success btn-outline rounded-2xl">
-          Login
-        </button>
+      <div className="navbar-end gap-2">
+        {user && (
+          <div className="avatar mr-1 max-sm:mr-2">
+            <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-2 ring-offset-2">
+              <img src={user?.providerData[0]?.photoURL} />
+            </div>
+          </div>
+        )}
+        {user && (
+          <div className="max-sm:hidden font-semibold">
+            <h1>{user?.providerData[0]?.displayName}</h1>
+          </div>
+        )}
+        <div>
+          {user ? (
+            <button
+              className="btn btn-error btn-outline rounded-2xl"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              className="btn btn-success btn-outline rounded-2xl"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

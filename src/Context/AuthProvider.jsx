@@ -1,16 +1,35 @@
-import React from 'react';
-import { AuthContext } from './AuthContext';
+import React, { useEffect, useState } from "react";
+import { AuthContext } from "./AuthContext";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import { auth } from "../firebase/firebase.config";
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const googleProvider = new GoogleAuthProvider();
 
-const AuthProvider = ({children}) => {
-    const data ={
-        name:'radin'
-    }
 
-    return (
-        <AuthContext value={data}>
-            {children}
-        </AuthContext>
-    );
+  useEffect(()=>{
+    onAuthStateChanged(auth,(cUser)=>{
+        setUser(cUser)
+        setLoading(false)
+    })
+  })
+
+  const googleSignIn = () => {
+    return signInWithPopup(auth, googleProvider);
+  };
+  
+  const handleLogout = ()=>{
+    return signOut(auth);
+  }
+  const data = {
+    googleSignIn,
+    user,
+    loading,
+    handleLogout
+  };
+
+  return <AuthContext value={data}>{children}</AuthContext>;
 };
 
 export default AuthProvider;
