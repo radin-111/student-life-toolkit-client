@@ -8,6 +8,7 @@ import {
   FiCpu,
   FiDollarSign,
   FiEdit,
+  FiHome,
 } from "react-icons/fi";
 import Logout from "./Logout";
 
@@ -74,39 +75,65 @@ const Dashboard = () => {
           </li>
 
           <li>
-            <NavLink className="flex items-center gap-2">
+            <NavLink
+              to={"/"}
+              className="flex items-center gap-2"
+            >
+              <FiHome /> Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={"/dashboard/classes"}
+              className="flex items-center gap-2"
+            >
               <FiBook /> Classes
             </NavLink>
           </li>
           <li>
-            <NavLink className="flex items-center gap-2">
+            <NavLink
+              to={"/dashboard/budget_tracker"}
+              className="flex items-center gap-2"
+            >
               <FiDollarSign /> Budget Tracker
             </NavLink>
           </li>
           <li>
-            <NavLink className="flex items-center gap-2">
+            <NavLink
+              to={"/dashboard/exam_qa_generator"}
+              className="flex items-center gap-2"
+            >
               <FiEdit /> Exam Q&A Generator
             </NavLink>
           </li>
           <li>
-            <NavLink className="flex items-center gap-2">
+            <NavLink
+              to={"/dashboard/study_planner"}
+              className="flex items-center gap-2"
+            >
               <FiCalendar /> Study Planner
             </NavLink>
           </li>
           <li>
-            <NavLink className="flex items-center gap-2">
+            <NavLink
+              to={"/dashboard/timer"}
+              className="flex items-center gap-2"
+            >
               <FiClock /> Timer
             </NavLink>
           </li>
           <li>
-            <NavLink className="flex items-center gap-2">
+            <NavLink
+              to={"/dashboard/assistant"}
+              className="flex items-center gap-2"
+            >
               <FiCpu /> AI Assistant
             </NavLink>
           </li>
-          <li><Logout btn={'btn-error'}></Logout></li>
+          <li className="mt-10">  
+            <Logout btn={"btn-error"}></Logout>
+          </li>
         </ul>
-
-        
       </div>
     </div>
   );

@@ -5,6 +5,8 @@ import Error from "../Components/Error";
 import Login from "../layouts/Login/Login";
 import Register from "../layouts/Register/Register";
 import Dashboard from "../Components/Dashboard";
+import Private from "../Context/Private";
+
 
 
 export const router = createBrowserRouter([
@@ -29,7 +31,8 @@ export const router = createBrowserRouter([
   },
   {
     path:'dashboard',
-    element:<Dashboard></Dashboard>,
+    element:<Private><Dashboard></Dashboard></Private>,
+    
     errorElement:<Error></Error>
   }
 ]);

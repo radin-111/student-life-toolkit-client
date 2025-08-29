@@ -1,8 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 import Logout from "./Logout";
+import {
+  FiBook,
+  FiCalendar,
+  FiClock,
+  FiCpu,
+  FiDollarSign,
+  FiEdit,
+} from "react-icons/fi";
+import { MdSpaceDashboard } from "react-icons/md";
 
 const Nav = () => {
   const { user } = useAuth();
@@ -93,15 +102,74 @@ const Nav = () => {
         )}
 
         {user && (
-          <div className="avatar mr-1 max-sm:mr-2">
-            <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-2 ring-offset-2">
-              <img src={user?.providerData[0]?.photoURL} />
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-2 ring-offset-2">
+                <img src={user?.providerData[0]?.photoURL} alt="User Avatar" />
+              </div>
             </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow space-y-4"
+            >
+              <li>
+                <NavLink
+                  to={"/dashboard"}
+                  className="flex items-center gap-2"
+                >
+                  <MdSpaceDashboard /> DashBoard
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"/dashboard/classes"}
+                  className="flex items-center gap-2"
+                >
+                  <FiBook /> Classes
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"/dashboard/budget_tracker"}
+                  className="flex items-center gap-2"
+                >
+                  <FiDollarSign /> Budget Tracker
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"/dashboard/exam_qa_generator"}
+                  className="flex items-center gap-2"
+                >
+                  <FiEdit /> Exam Q&A Generator
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to={"/dashboard/study_planner"} className="flex items-center gap-2">
+                  <FiCalendar /> Study Planner
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to={'/dashboard/timer'} className="flex items-center gap-2">
+                  <FiClock /> Timer
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to={'/dashboard/assistant'} className="flex items-center gap-2">
+                  <FiCpu /> AI Assistant
+                </NavLink>
+              </li>
+            </ul>
           </div>
         )}
+
         <div>
           {user ? (
-            <Logout btn={'btn-error'}></Logout>
+            <Logout btn={"btn-error"}></Logout>
           ) : (
             <button
               className="btn btn-success btn-outline rounded-2xl"
