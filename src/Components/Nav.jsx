@@ -2,44 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
+import Logout from "./Logout";
 
 const Nav = () => {
-  const { user, handleLogout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
-
-  const logout = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Do you really want to log out?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, log out",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        handleLogout()
-          .then(() => {
-            Swal.fire({
-              icon: "success",
-              title: "Logged Out",
-              text: "You have been successfully logged out.",
-              timer: 2000,
-              showConfirmButton: false,
-            });
-
-            navigate("/");
-          })
-          .catch((error) => {
-            Swal.fire({
-              icon: "error",
-              title: "Logout Failed",
-              text: error.message,
-              confirmButtonText: "Try Again",
-            });
-          });
-      }
-    });
-  };
 
   return (
     // https://i.ibb.co.com/s9J7m3XX/image-1.jpg
@@ -120,25 +87,21 @@ const Nav = () => {
       </div>
       <div className="navbar-end gap-2">
         {user && (
+          <div className="max-sm:hidden font-semibold">
+            <h1>{user?.providerData[0]?.displayName}</h1>
+          </div>
+        )}
+
+        {user && (
           <div className="avatar mr-1 max-sm:mr-2">
             <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-2 ring-offset-2">
               <img src={user?.providerData[0]?.photoURL} />
             </div>
           </div>
         )}
-        {user && (
-          <div className="max-sm:hidden font-semibold">
-            <h1>{user?.providerData[0]?.displayName}</h1>
-          </div>
-        )}
         <div>
           {user ? (
-            <button
-              className="btn btn-error btn-outline rounded-2xl"
-              onClick={logout}
-            >
-              Logout
-            </button>
+            <Logout btn={'btn-error'}></Logout>
           ) : (
             <button
               className="btn btn-success btn-outline rounded-2xl"
