@@ -6,6 +6,8 @@ import Login from "../layouts/Login/Login";
 import Register from "../layouts/Register/Register";
 import Dashboard from "../Components/Dashboard";
 import Private from "../Context/Private";
+import AddClassForm from "../Components/AddClassForm";
+import ClassScheduleTracker from "../layouts/ClassScheduleTracker/ClassScheduleTracker";
 
 
 
@@ -33,6 +35,16 @@ export const router = createBrowserRouter([
     path:'dashboard',
     element:<Private><Dashboard></Dashboard></Private>,
     
-    errorElement:<Error></Error>
+    errorElement:<Error></Error>,
+    children:[
+      {
+        path:'add_class',
+        element:<AddClassForm></AddClassForm>
+      },
+      {
+        path:'classes',
+        element:<ClassScheduleTracker></ClassScheduleTracker>
+      }
+    ]
   }
 ]);

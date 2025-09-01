@@ -17,6 +17,17 @@ const Nav = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const links = (
+    <>
+      <li>
+        <NavLink to={"reviews"}>Reviews</NavLink>
+      </li>
+      <li>
+        <NavLink to={"community"}>Community</NavLink>
+      </li>
+    </>
+  );
+
   return (
     // https://i.ibb.co.com/s9J7m3XX/image-1.jpg
     <div className="navbar bg-base-100 lg:px-10 shadow-sm">
@@ -43,23 +54,7 @@ const Nav = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Parent</a>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
+           {links}
           </ul>
         </div>
         <div className="flex gap-1 items-center">
@@ -73,25 +68,7 @@ const Nav = () => {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li>
-            <a>Item 1</a>
-          </li>
-          <li>
-            <details>
-              <summary>Parent</summary>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
-            </details>
-          </li>
-          <li>
-            <a>Item 3</a>
-          </li>
+         {links}
         </ul>
       </div>
       <div className="navbar-end gap-2">
@@ -117,10 +94,7 @@ const Nav = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow space-y-4"
             >
               <li>
-                <NavLink
-                  to={"/dashboard"}
-                  className="flex items-center gap-2"
-                >
+                <NavLink to={"/dashboard"} className="flex items-center gap-2">
                   <MdSpaceDashboard /> DashBoard
                 </NavLink>
               </li>
@@ -149,17 +123,26 @@ const Nav = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to={"/dashboard/study_planner"} className="flex items-center gap-2">
+                <NavLink
+                  to={"/dashboard/study_planner"}
+                  className="flex items-center gap-2"
+                >
                   <FiCalendar /> Study Planner
                 </NavLink>
               </li>
               <li>
-                <NavLink to={'/dashboard/timer'} className="flex items-center gap-2">
+                <NavLink
+                  to={"/dashboard/timer"}
+                  className="flex items-center gap-2"
+                >
                   <FiClock /> Timer
                 </NavLink>
               </li>
               <li>
-                <NavLink to={'/dashboard/assistant'} className="flex items-center gap-2">
+                <NavLink
+                  to={"/dashboard/assistant"}
+                  className="flex items-center gap-2"
+                >
                   <FiCpu /> AI Assistant
                 </NavLink>
               </li>
