@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { FaTrashAlt, FaEdit, FaFilePdf, FaCalendarAlt } from "react-icons/fa";
 import useAxios from "../../hooks/useAxios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import Loading from "../../Components/Loading";
+import { jsPDF } from "jspdf";
 
 export default function ClassScheduleTracker() {
   const axiosSecure = useAxios();
@@ -16,6 +18,20 @@ export default function ClassScheduleTracker() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  // Tailwind colors to RGB mapping for PDF
+  const colorMap = {
+    "red-500": [239, 68, 68],
+    "blue-500": [59, 130, 246],
+    "green-500": [34, 197, 94],
+    "yellow-400": [250, 204, 21],
+    "purple-500": [139, 92, 246],
+    "pink-500": [236, 72, 153],
+    "indigo-500": [79, 70, 229],
+    "orange-500": [251, 146, 60],
+    "teal-500": [20, 184, 166],
+    "lime-500": [132, 204, 22],
+  };
+
   // Fetch classes
   const { data: classes = [], isLoading } = useQuery({
     queryKey: ["classes", user?.providerData[0]?.email],
@@ -24,7 +40,6 @@ export default function ClassScheduleTracker() {
       const res = await axiosSecure.get(
         `/classes?email=${user?.providerData[0]?.email}`
       );
-      // Ensure classes is always an array
       return Array.isArray(res.data) ? res.data : [];
     },
     enabled: !!user?.providerData[0]?.email,
@@ -86,14 +101,85 @@ export default function ClassScheduleTracker() {
   const handleDragStart = (e, cls) =>
     e.dataTransfer.setData("classId", cls._id);
 
-  // --- MAIN RENDER ---
-  if (isLoading) {
-    return (
-      <p className="text-center text-lg text-gray-500 animate-pulse mt-10">
-        Loading classes...
-      </p>
-    );
-  }
+  // --- EXPORT FUNCTIONS ---
+  const exportPDF = () => {
+    const doc = new jsPDF("p", "pt", "a4");
+    doc.setFontSize(20);
+    doc.text("📅 Class Schedule Tracker", 40, 40);
+
+    let y = 70;
+
+    Object.keys(groupedByDate)
+      .sort()
+      .forEach((date) => {
+        doc.setFontSize(16);
+        doc.setTextColor(40, 40, 40);
+        doc.text(format(new Date(date), "EEEE, MMMM dd, yyyy"), 40, y);
+        y += 20;
+
+        groupedByDate[date].forEach((cls) => {
+          // Colored left border
+          const color = colorMap[cls.color] || [0, 0, 0];
+          doc.setFillColor(...color);
+          doc.rect(40, y, 5, 50, "F");
+
+          // Card background
+          doc.setFillColor(255, 255, 255);
+          doc.rect(45, y, 500, 50, "F");
+
+          // Card text
+          doc.setFontSize(14);
+          doc.setTextColor(0, 0, 0);
+          doc.text(`Subject: ${cls.subject}`, 50, y + 15);
+          doc.text(`Instructor: ${cls.instructor}`, 50, y + 30);
+          doc.text(`Time: ${cls.datetime.split("T")[1]}`, 50, y + 45);
+
+          y += 60;
+          if (y > 750) {
+            // new page
+            doc.addPage();
+            y = 40;
+          }
+        });
+        y += 10;
+      });
+
+    doc.save("class_schedule.pdf");
+  };
+
+  const exportICS = () => {
+    let icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+`;
+    classes.forEach((cls) => {
+      const start = cls.datetime.replace(/-|:/g, "").split(".")[0]; // YYYYMMDDTHHMMSS
+      const endDate = new Date(cls.datetime);
+      endDate.setHours(endDate.getHours() + 1); // 1 hour default duration
+      const end = endDate.toISOString().replace(/-|:|\.\d+/g, "");
+      icsContent += `BEGIN:VEVENT
+SUMMARY:${cls.subject}
+DTSTART:${start}Z
+DTEND:${end}Z
+DESCRIPTION:Instructor: ${cls.instructor}
+END:VEVENT
+`;
+    });
+    icsContent += "END:VCALENDAR";
+
+    const blob = new Blob([icsContent], {
+      type: "text/calendar;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "class_schedule.ics";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  if (isLoading) return <Loading />;
 
   if (classes.length === 0) {
     return (
@@ -116,12 +202,20 @@ export default function ClassScheduleTracker() {
       <h1 className="text-3xl md:text-4xl font-extrabold text-center text-primary mb-6">
         📅 Class Schedule Tracker
       </h1>
-      <button
-        className="btn btn-success"
-        onClick={() => navigate("/dashboard/add_class")}
-      >
-        ➕ Add Class
-      </button>
+      <div className="flex gap-2 mb-4 flex-wrap justify-center">
+        <button
+          className="btn btn-success"
+          onClick={() => navigate("/dashboard/add_class")}
+        >
+          ➕ Add Class
+        </button>
+        <button className="btn btn-primary" onClick={exportPDF}>
+          <FaFilePdf className="mr-1" /> Export PDF
+        </button>
+        <button className="btn btn-secondary" onClick={exportICS}>
+          <FaCalendarAlt className="mr-1" /> Export ICS
+        </button>
+      </div>
 
       {Object.keys(groupedByDate)
         .sort()

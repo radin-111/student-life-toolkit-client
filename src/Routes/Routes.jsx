@@ -9,6 +9,7 @@ import Private from "../Context/Private";
 import AddClassForm from "../Components/AddClassForm";
 import ClassScheduleTracker from "../layouts/ClassScheduleTracker/ClassScheduleTracker";
 import Timer from "../layouts/Timer/Timer";
+import Chatbot from "../layouts/Chatbot/Chatbot";
 
 
 
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path:'timer',
         element:<Timer></Timer>
+      },
+      {
+        path:'assistant',
+        element:<Chatbot></Chatbot>
       }
     ]
   }
