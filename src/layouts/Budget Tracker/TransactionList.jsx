@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import useAxios from "../../hooks/useAxios";
+import Loading from "../../Components/Loading";
+import useAuth from "../../hooks/useAuth";
 
 const TransactionList = () => {
   const queryClient = useQueryClient();
   const [editingTransaction, setEditingTransaction] = useState(null);
   const axiosSecure = useAxios();
-
-  // Latest TanStack Query v5: useQuery
+  const { user } = useAuth();
+  // Fetch transactions
   const { data: transactions = [], isLoading } = useQuery({
     queryKey: ["transactions"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/transactions");
+      const res = await axiosSecure.get(`/transactions?email=${user?.providerData[0]?.email}`);
       return res.data;
     },
   });
@@ -27,10 +29,12 @@ const TransactionList = () => {
     onError: () => Swal.fire("Error!", "Failed to delete.", "error"),
   });
 
-  // Edit mutation
+  // Edit mutation (do NOT include _id in payload)
   const editMutation = useMutation({
-    mutationFn: (updated) =>
-      axiosSecure.put(`/transactions/${updated._id}`, updated),
+    mutationFn: (updated) => {
+      const { _id, ...payload } = updated; // remove _id from payload
+      return axiosSecure.put(`/transactions/${_id}`, payload);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       Swal.fire("Success!", "Transaction updated.", "success");
@@ -58,6 +62,7 @@ const TransactionList = () => {
   const handleEditSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
+
     const updated = {
       ...editingTransaction,
       amount: parseFloat(form.amount.value),
@@ -66,11 +71,11 @@ const TransactionList = () => {
       date: form.date.value,
       notes: form.notes.value,
     };
+
     editMutation.mutate(updated);
   };
 
-  if (isLoading)
-    return <p className="text-center mt-6 text-gray-600">Loading...</p>;
+  if (isLoading) return <Loading></Loading>;
 
   return (
     <div className="max-w-4xl mx-auto p-4">

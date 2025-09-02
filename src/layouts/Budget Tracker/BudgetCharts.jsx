@@ -16,6 +16,8 @@ import {
   Tooltip, // for BarChart
   ResponsiveContainer,
 } from "recharts";
+import Loading from "../../Components/Loading";
+import useAuth from "../../hooks/useAuth";
 
 const COLORS = [
   "#4f46e5",
@@ -28,18 +30,19 @@ const COLORS = [
 
 const BudgetCharts = () => {
   const axiosSecure = useAxios();
-
+  const { user } = useAuth();
   // TanStack Query v5
   const { data: transactions = [], isLoading } = useQuery({
     queryKey: ["transactions"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/transactions");
+      const res = await axiosSecure.get(
+        `/transactions?email=${user?.providerData[0]?.email}`
+      );
       return res.data;
     },
   });
 
-  if (isLoading)
-    return <p className="text-center mt-6 text-gray-600">Loading charts...</p>;
+  if (isLoading) return <Loading></Loading>;
 
   // Prepare PieChart data (expenses by category)
   const categoryData = Object.values(
