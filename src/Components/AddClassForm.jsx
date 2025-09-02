@@ -4,12 +4,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxios from "../hooks/useAxios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
 
 export default function AddClassForm() {
   const axiosSecure = useAxios();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
+  const { user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -32,7 +33,7 @@ export default function AddClassForm() {
         icon: "success",
         confirmButtonColor: "#3b82f6",
       });
-      navigate('/dashboard/classes')
+      navigate("/dashboard/classes");
     },
     onError: (err) => {
       Swal.fire({
@@ -45,6 +46,7 @@ export default function AddClassForm() {
   });
 
   const onSubmit = (data) => {
+    data.email = user?.providerData[0]?.email;
     mutation.mutate(data);
   };
 

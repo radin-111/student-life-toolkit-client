@@ -8,6 +8,7 @@ import Dashboard from "../Components/Dashboard";
 import Private from "../Context/Private";
 import AddClassForm from "../Components/AddClassForm";
 import ClassScheduleTracker from "../layouts/ClassScheduleTracker/ClassScheduleTracker";
+import Timer from "../layouts/Timer/Timer";
 
 
 
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
       {
         path:'classes',
         element:<ClassScheduleTracker></ClassScheduleTracker>
+      },
+      {
+        path:'timer',
+        element:<Timer></Timer>
       }
     ]
   }
