@@ -10,6 +10,7 @@ import AddClassForm from "../Components/AddClassForm";
 import ClassScheduleTracker from "../layouts/ClassScheduleTracker/ClassScheduleTracker";
 import Timer from "../layouts/Timer/Timer";
 import BudgetDashboard from "../layouts/Budget Tracker/BudgetDashboard";
+import StudyPlanner from "../layouts/StudyPlanner/StudyPlanner";
 
 
 
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path:'budget_tracker',
         element:<BudgetDashboard></BudgetDashboard>
+      },
+      {
+        path:"study_planner",
+        element:<StudyPlanner></StudyPlanner>
       }
     ]
   }
