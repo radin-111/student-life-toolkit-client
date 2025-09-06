@@ -59,7 +59,10 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-base-100 to-base-200">
+    <section
+      id="reviews"
+      className="py-20 bg-gradient-to-b from-base-100 to-base-200"
+    >
       <h2 className="text-4xl font-bold text-center mb-14">
         What Students Say
       </h2>

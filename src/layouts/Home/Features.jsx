@@ -36,7 +36,7 @@ export default function Features() {
   ];
 
   return (
-    <section className="py-20 bg-base-100">
+    <section className="py-20 bg-base-100" id="features">
       <h2 className="text-4xl font-bold text-center mb-14">
         Everything You Need in One App
       </h2>
