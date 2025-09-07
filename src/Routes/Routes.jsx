@@ -11,6 +11,11 @@ import ClassScheduleTracker from "../layouts/ClassScheduleTracker/ClassScheduleT
 import Timer from "../layouts/Timer/Timer";
 import BudgetDashboard from "../layouts/Budget Tracker/BudgetDashboard";
 import StudyPlanner from "../layouts/StudyPlanner/StudyPlanner";
+import QAGenerator from "../layouts/QAGenerator/QAGenerator";
+import ChatBot from "../layouts/AI_Assistant/Chatbot";
+
+
+
 
 
 
@@ -60,6 +65,14 @@ export const router = createBrowserRouter([
       {
         path:"study_planner",
         element:<StudyPlanner></StudyPlanner>
+      },
+      {
+        path:"exam_qa_generator",
+        element:<QAGenerator></QAGenerator>
+      },
+      {
+        path:"assistant",
+        element:<ChatBot></ChatBot>
       }
     ]
   }
