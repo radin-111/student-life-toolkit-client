@@ -79,7 +79,7 @@ const QAGenerator = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold text-center mb-6 text-indigo-700">
-        📚 Smart Exam & QA Generator
+        📚 Smart Exam & QA Generator Powered by Deepseek R1
       </h1>
 
       <textarea

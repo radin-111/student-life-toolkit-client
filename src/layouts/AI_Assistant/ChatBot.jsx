@@ -6,7 +6,7 @@ const ChatBot = () => {
     {
       id: 1,
       sender: "bot",
-      text: "Hello! I'm QwenChatBot 🤖. How can I help you today?",
+      text: "Hello! I'm HappyBOT powered by Deepseek 🤖. How can I help you today?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -71,7 +71,7 @@ const ChatBot = () => {
       <div className="flex flex-col w-full max-w-5xl h-full bg-base-100 rounded-xl shadow-lg overflow-hidden border-2 border-base-300">
         {/* Header */}
         <div className="flex justify-between items-center bg-base-200 text-base-content p-5 shadow-md rounded-t-xl border-b border-base-300">
-          <h2 className="text-xl font-bold tracking-wide">🤖 QwenChatBot</h2>
+          <h2 className="text-xl font-bold tracking-wide">🤖 HappyBOT</h2>
           <span className="text-sm opacity-80 italic">AI Assistant</span>
         </div>
 
