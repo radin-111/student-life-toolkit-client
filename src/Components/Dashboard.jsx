@@ -75,10 +75,7 @@ const Dashboard = () => {
           </li>
 
           <li>
-            <NavLink
-              to={"/"}
-              className="flex items-center gap-2"
-            >
+            <NavLink to={"/"} className="flex items-center gap-2">
               <FiHome /> Home
             </NavLink>
           </li>
@@ -130,7 +127,15 @@ const Dashboard = () => {
               <FiCpu /> AI Assistant
             </NavLink>
           </li>
-          <li className="mt-10">  
+          <li>
+            <NavLink
+              to={"/dashboard/summarizer"}
+              className="flex items-center gap-2"
+            >
+              Summarizer
+            </NavLink>
+          </li>
+          <li className="mt-10">
             <Logout btn={"btn-error"}></Logout>
           </li>
         </ul>

@@ -13,6 +13,7 @@ import BudgetDashboard from "../layouts/Budget Tracker/BudgetDashboard";
 import StudyPlanner from "../layouts/StudyPlanner/StudyPlanner";
 import QAGenerator from "../layouts/QAGenerator/QAGenerator";
 import ChatBot from "../layouts/AI_Assistant/Chatbot";
+import Summarizer from "../layouts/Summarizer/Summarizer";
 
 
 
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
       {
         path:"assistant",
         element:<ChatBot></ChatBot>
+      },
+      {
+        path:"summarizer",
+        element:<Summarizer></Summarizer>
       }
     ]
   }
