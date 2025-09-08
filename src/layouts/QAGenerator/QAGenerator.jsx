@@ -64,8 +64,7 @@ const QAGenerator = () => {
         position: "top-end",
         showConfirmButton: false,
       });
-    } catch (err) {
-      console.error("Error:", err);
+    } catch {
       Swal.fire({
         icon: "error",
         title: "Error",

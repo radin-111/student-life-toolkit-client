@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AiOutlineSend, AiOutlineUser, AiOutlineRobot } from "react-icons/ai";
+import { FaCopy } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
@@ -14,6 +16,33 @@ const ChatBot = () => {
   const messagesEndRef = useRef(null);
 
   const OPENROUTER_API_KEY = import.meta.env.VITE_QWEN_KEY;
+
+  const parseMessage = (text) => {
+    const regex = /```(\w+)?\n([\s\S]*?)```/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push({
+          type: "text",
+          content: text.slice(lastIndex, match.index),
+        });
+      }
+      parts.push({
+        type: "code",
+        content: match[2],
+        language: match[1] || "text",
+      });
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      parts.push({ type: "text", content: text.slice(lastIndex) });
+    }
+
+    return parts;
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -47,8 +76,7 @@ const ChatBot = () => {
         ...prev,
         { id: Date.now(), sender: "bot", text: botMessage },
       ]);
-    } catch (error) {
-      console.error(error);
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
@@ -60,6 +88,11 @@ const ChatBot = () => {
     } finally {
       setTyping(false);
     }
+  };
+
+  const handleCopy = (code) => {
+    navigator.clipboard.writeText(code);
+    Swal.fire("Copied!", "Code copied to clipboard.", "success");
   };
 
   useEffect(() => {
@@ -89,6 +122,7 @@ const ChatBot = () => {
                   <AiOutlineRobot size={22} />
                 </div>
               )}
+
               <div
                 className={`px-4 py-3 rounded-2xl max-w-lg shadow-md text-sm md:text-base transition-all duration-200 leading-relaxed whitespace-pre-line ${
                   msg.sender === "user"
@@ -96,8 +130,26 @@ const ChatBot = () => {
                     : "bg-base-200 text-base-content rounded-bl-none"
                 }`}
               >
-                {msg.text}
+                {parseMessage(msg.text).map((part, idx) =>
+                  part.type === "code" ? (
+                    <div
+                      key={idx}
+                      className="relative bg-base-300 p-2 rounded-lg my-1 overflow-x-auto"
+                    >
+                      <pre className="whitespace-pre-wrap">{part.content}</pre>
+                      <button
+                        onClick={() => handleCopy(part.content)}
+                        className="absolute top-1 right-1 btn btn-xs btn-secondary flex items-center gap-1"
+                      >
+                        <FaCopy size={12} /> Copy
+                      </button>
+                    </div>
+                  ) : (
+                    <span key={idx}>{part.content}</span>
+                  )
+                )}
               </div>
+
               {msg.sender === "user" && (
                 <div className="p-3 rounded-full bg-primary text-white shadow-md">
                   <AiOutlineUser size={22} />

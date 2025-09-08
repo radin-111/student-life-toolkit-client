@@ -78,7 +78,6 @@ const AICoder = () => {
       setResponse((prev) => [...prev, ...parseResponse(content)]);
       setPrompt("");
     } catch (err) {
-      console.error(err);
       Swal.fire("Error", err.message || "Failed to get AI response", "error");
     } finally {
       setLoading(false);

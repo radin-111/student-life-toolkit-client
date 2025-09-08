@@ -42,8 +42,7 @@ ${text}`,
 
       const data = await response.json();
       setSummary(data.choices[0].message.content);
-    } catch (err) {
-      console.error(err);
+    } catch {
       setSummary("Error: Could not generate summary.");
     } finally {
       setLoading(false);
