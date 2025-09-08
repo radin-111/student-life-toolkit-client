@@ -11,6 +11,7 @@ import {
   FiHome,
 } from "react-icons/fi";
 import Logout from "./Logout";
+import { FaCode, FaFileAlt } from "react-icons/fa";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -132,7 +133,15 @@ const Dashboard = () => {
               to={"/dashboard/summarizer"}
               className="flex items-center gap-2"
             >
-              Summarizer
+              <FaFileAlt /> Summarizer
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={"/dashboard/coder"}
+              className="flex items-center gap-2"
+            >
+              <FaCode /> AI Coder
             </NavLink>
           </li>
           <li className="mt-10">

@@ -14,71 +14,74 @@ import StudyPlanner from "../layouts/StudyPlanner/StudyPlanner";
 import QAGenerator from "../layouts/QAGenerator/QAGenerator";
 import ChatBot from "../layouts/AI_Assistant/Chatbot";
 import Summarizer from "../layouts/Summarizer/Summarizer";
-
-
-
-
-
-
+import AICoder from "../layouts/AICoder/AICoder";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Root></Root>,
-    errorElement:<Error></Error>,
-    children:[
+    errorElement: <Error></Error>,
+    children: [
       {
-        index:true,
-        element:<Home></Home>
+        index: true,
+        element: <Home></Home>,
       },
       {
-        path:'login',
-        element:<Login></Login>
+        path: "login",
+        element: <Login></Login>,
       },
       {
-        path:'register',
-        element:<Register></Register>
-      }
-    ]
+        path: "register",
+        element: <Register></Register>,
+      },
+    ],
   },
   {
-    path:'dashboard',
-    element:<Private><Dashboard></Dashboard></Private>,
-    
-    errorElement:<Error></Error>,
-    children:[
+    path: "dashboard",
+    element: (
+      <Private>
+        <Dashboard></Dashboard>
+      </Private>
+    ),
+
+    errorElement: <Error></Error>,
+    children: [
       {
-        path:'add_class',
-        element:<AddClassForm></AddClassForm>
+        path: "add_class",
+        element: <AddClassForm></AddClassForm>,
       },
       {
-        path:'classes',
-        element:<ClassScheduleTracker></ClassScheduleTracker>
+        path: "classes",
+        element: <ClassScheduleTracker></ClassScheduleTracker>,
       },
       {
-        path:'timer',
-        element:<Timer></Timer>
+        path: "timer",
+        element: <Timer></Timer>,
       },
       {
-        path:'budget_tracker',
-        element:<BudgetDashboard></BudgetDashboard>
+        path: "budget_tracker",
+        element: <BudgetDashboard></BudgetDashboard>,
       },
       {
-        path:"study_planner",
-        element:<StudyPlanner></StudyPlanner>
+        path: "study_planner",
+        element: <StudyPlanner></StudyPlanner>,
       },
       {
-        path:"exam_qa_generator",
-        element:<QAGenerator></QAGenerator>
+        path: "exam_qa_generator",
+        element: <QAGenerator></QAGenerator>,
       },
       {
-        path:"assistant",
-        element:<ChatBot></ChatBot>
+        path: "assistant",
+        element: <ChatBot></ChatBot>,
       },
       {
-        path:"summarizer",
-        element:<Summarizer></Summarizer>
-      }
-    ]
-  }
+        path: "summarizer",
+        element: <Summarizer></Summarizer>,
+      },
+      {
+        path: "coder",
+        element: <AICoder></AICoder>,
+      },
+    ],
+  },
 ]);
