@@ -11,7 +11,7 @@ import {
   FiHome,
 } from "react-icons/fi";
 import Logout from "./Logout";
-import { FaCode, FaFileAlt } from "react-icons/fa";
+import { FaChartBar, FaCode, FaFileAlt } from "react-icons/fa";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -78,6 +78,15 @@ const Dashboard = () => {
           <li>
             <NavLink to={"/"} className="flex items-center gap-2">
               <FiHome /> Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={"/dashboard"}
+              className="flex items-center gap-2"
+            >
+              <FaChartBar />
+              <span>Statistics</span>
             </NavLink>
           </li>
           <li>

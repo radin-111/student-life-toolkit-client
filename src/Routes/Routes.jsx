@@ -15,6 +15,7 @@ import QAGenerator from "../layouts/QAGenerator/QAGenerator";
 import ChatBot from "../layouts/AI_Assistant/Chatbot";
 import Summarizer from "../layouts/Summarizer/Summarizer";
 import AICoder from "../layouts/AICoder/AICoder";
+import Statistics from "../Components/Statistics";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,11 @@ export const router = createBrowserRouter([
 
     errorElement: <Error></Error>,
     children: [
+      {
+        index: true,
+        
+        element: <Statistics></Statistics>,
+      },
       {
         path: "add_class",
         element: <AddClassForm></AddClassForm>,

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 import Logout from "./Logout";
@@ -12,6 +12,7 @@ import {
   FiEdit,
 } from "react-icons/fi";
 import { MdSpaceDashboard } from "react-icons/md";
+import { FaCode, FaFileAlt } from "react-icons/fa";
 
 const Nav = () => {
   const { user } = useAuth();
@@ -25,7 +26,6 @@ const Nav = () => {
       <li>
         <a href={"#reviews"}>Reviews</a>
       </li>
-      
     </>
   );
 
@@ -55,7 +55,7 @@ const Nav = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-           {links}
+            {links}
           </ul>
         </div>
         <div className="flex gap-1 items-center">
@@ -69,7 +69,17 @@ const Nav = () => {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-         {links}
+          {links}
+          {user && (
+            <>
+              <li>
+                <Link to={"/dashboard"}>Dashboard</Link>
+              </li>
+              <li>
+                <Link to={"/dashboard/assistant"}>AI Assistant</Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
       <div className="navbar-end gap-2">
@@ -145,6 +155,22 @@ const Nav = () => {
                   className="flex items-center gap-2"
                 >
                   <FiCpu /> AI Assistant
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"/dashboard/summarizer"}
+                  className="flex items-center gap-2"
+                >
+                  <FaFileAlt /> Summarizer
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"/dashboard/coder"}
+                  className="flex items-center gap-2"
+                >
+                  <FaCode /> AI Coder
                 </NavLink>
               </li>
             </ul>
