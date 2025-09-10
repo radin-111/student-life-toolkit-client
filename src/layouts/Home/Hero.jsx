@@ -35,9 +35,7 @@ export default function Hero() {
               Get Started Free
             </button>
           )}
-          <button className="px-6 py-3 rounded-2xl border border-white font-semibold hover:bg-white hover:text-indigo-600 transition">
-            Learn More
-          </button>
+            
         </div>
       </div>
     </section>

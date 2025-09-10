@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 import useAuth from "../hooks/useAuth";
 import {
   FiBook,
@@ -11,8 +11,8 @@ import {
   FiHome,
 } from "react-icons/fi";
 import Logout from "./Logout";
-import { FaChartBar, FaCode, FaFileAlt } from "react-icons/fa";
-
+import { FaCode, FaFileAlt } from "react-icons/fa";
+import { RxActivityLog } from "react-icons/rx";
 const Dashboard = () => {
   const { user } = useAuth();
   return (
@@ -80,15 +80,7 @@ const Dashboard = () => {
               <FiHome /> Home
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to={"/dashboard"}
-              className="flex items-center gap-2"
-            >
-              <FaChartBar />
-              <span>Statistics</span>
-            </NavLink>
-          </li>
+
           <li>
             <NavLink
               to={"/dashboard/classes"}
@@ -153,6 +145,16 @@ const Dashboard = () => {
               <FaCode /> AI Coder
             </NavLink>
           </li>
+          <li>
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300"
+            >
+              <RxActivityLog />
+              <span>Overview</span>
+            </Link>
+          </li>
+
           <li className="mt-10">
             <Logout btn={"btn-error"}></Logout>
           </li>

@@ -58,7 +58,7 @@ const Nav = () => {
             {links}
           </ul>
         </div>
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 items-center" onClick={()=>navigate('/')}>
           <img
             src="https://i.ibb.co.com/s9J7m3XX/image-1.jpg"
             className="w-[50px] h-[50px] rounded"

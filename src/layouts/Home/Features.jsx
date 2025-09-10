@@ -4,6 +4,9 @@ import {
   FiEdit3,
   FiCheckSquare,
   FiClock,
+  FiMessageSquare,
+  FiCode,
+  FiFileText,
 } from "react-icons/fi";
 
 export default function Features() {
@@ -32,6 +35,21 @@ export default function Features() {
       title: "Productivity Boosters",
       desc: "Stay focused with Pomodoro timer, motivation quotes, and wellness tools.",
       icon: <FiClock className="text-4xl text-pink-500" />,
+    },
+    {
+      title: "Summarizer AI",
+      desc: "Paste notes or upload long text and get concise, clear summaries in one click.",
+      icon: <FiFileText className="text-4xl text-indigo-500" />,
+    },
+    {
+      title: "AI Assistant",
+      desc: "Chat with an intelligent study buddy for quick answers, brainstorming, and guidance.",
+      icon: <FiMessageSquare className="text-4xl text-emerald-500" />,
+    },
+    {
+      title: "AI Coder",
+      desc: "Generate, debug, and explain code snippets in multiple programming languages.",
+      icon: <FiCode className="text-4xl text-red-500" />,
     },
   ];
 
