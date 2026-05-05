@@ -10,12 +10,14 @@ import {
   FiFileText,
 } from "react-icons/fi";
 import { motion } from 'framer-motion';
+import { useTheme } from "../../Context/ThemeContext";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Features() {
+  const { isDarkMode } = useTheme();
   const featuresRef = useRef(null);
   const cardsRef = useRef(null);
 
@@ -92,9 +94,17 @@ export default function Features() {
   ];
 
   return (
-    <section ref={featuresRef} className="py-20 bg-base-100" id="features">
+    <section 
+      ref={featuresRef} 
+      className={`py-20 transition-colors duration-300 ${
+        isDarkMode ? 'bg-base-300' : 'bg-base-100'
+      }`} 
+      id="features"
+    >
       <motion.h2 
-        className="text-4xl font-bold text-center mb-14"
+        className={`text-4xl font-bold text-center mb-14 ${
+          isDarkMode ? 'text-base-content' : 'text-base-content'
+        }`}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -109,11 +119,17 @@ export default function Features() {
         {features.map((feature, index) => (
           <motion.div
             key={index}
-            className="card bg-base-200 shadow-xl p-8 flex flex-col items-center text-center rounded-xl"
+            className={`card shadow-xl p-8 flex flex-col items-center text-center rounded-xl transition-colors duration-300 ${
+              isDarkMode 
+                ? 'bg-base-200 hover:bg-base-100' 
+                : 'bg-base-200 hover:bg-base-100'
+            }`}
             whileHover={{ 
               scale: 1.03, 
               y: -5,
-              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+              boxShadow: isDarkMode 
+                ? "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)"
+                : "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
             }}
             transition={{ duration: 0.3 }}
           >
@@ -124,8 +140,12 @@ export default function Features() {
             >
               {feature.icon}
             </motion.div>
-            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-            <p className="text-sm text-gray-600">{feature.desc}</p>
+            <h3 className={`text-xl font-semibold mb-2 ${
+              isDarkMode ? 'text-base-content' : 'text-base-content'
+            }`}>{feature.title}</h3>
+            <p className={`text-sm ${
+              isDarkMode ? 'text-base-content/70' : 'text-gray-600'
+            }`}>{feature.desc}</p>
           </motion.div>
         ))}
       </div>

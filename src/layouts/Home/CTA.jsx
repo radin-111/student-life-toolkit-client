@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { FaRocket, FaSignInAlt, FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router";
 import { motion } from 'framer-motion';
+import { useTheme } from "../../Context/ThemeContext";
 import GradientText from "../../Components/GradientText";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,6 +10,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function CTA() {
+  const { isDarkMode } = useTheme();
   const ctaRef = useRef(null);
   const benefitsRef = useRef(null);
   const buttonsRef = useRef(null);
@@ -69,7 +71,9 @@ export default function CTA() {
   return (
     <motion.section 
       ref={ctaRef}
-      className="relative py-24 bg-base-200 text-center overflow-hidden"
+      className={`relative py-24 text-center overflow-hidden transition-colors duration-300 ${
+        isDarkMode ? 'bg-base-200' : 'bg-base-200'
+      }`}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
@@ -80,7 +84,11 @@ export default function CTA() {
         {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-24 h-24 rounded-full bg-gradient-to-r from-primary/5 to-secondary/5"
+            className={`absolute w-24 h-24 rounded-full ${
+              isDarkMode 
+                ? 'bg-gradient-to-r from-purple-900/10 to-pink-900/10' 
+                : 'bg-gradient-to-r from-primary/5 to-secondary/5'
+            }`}
             animate={{
               scale: [1, 1.1, 1],
               x: [0, 10, 0],
@@ -116,7 +124,9 @@ export default function CTA() {
 
         {/* Supporting text */}
         <motion.p 
-          className="text-lg mb-12 text-gray-600"
+          className={`text-lg mb-12 transition-colors duration-300 ${
+            isDarkMode ? 'text-base-content/80' : 'text-gray-600'
+          }`}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -139,11 +149,17 @@ export default function CTA() {
           ].map((benefit, index) => (
             <motion.div
               key={index}
-              className="flex items-center justify-center gap-3 p-4 bg-base-100 rounded-lg shadow hover:shadow-lg transition"
+              className={`flex items-center justify-center gap-3 p-4 rounded-lg shadow hover:shadow-lg transition-all duration-300 ${
+                isDarkMode 
+                  ? 'bg-base-100 hover:bg-base-300' 
+                  : 'bg-base-200 hover:bg-base-100'
+              }`}
               whileHover={{ 
                 scale: 1.05, 
                 y: -3,
-                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
+                boxShadow: isDarkMode
+                  ? "0 10px 25px -5px rgba(0, 0, 0, 0.3)"
+                  : "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
               }}
               transition={{ duration: 0.3 }}
             >
@@ -151,9 +167,13 @@ export default function CTA() {
                 whileHover={{ rotate: 360, scale: 1.2 }}
                 transition={{ duration: 0.6 }}
               >
-                <benefit.icon className={`text-${benefit.color} text-2xl`} />
+                <benefit.icon className={`text-2xl transition-colors duration-300 ${
+                isDarkMode ? 'text-purple-400' : `text-${benefit.color}`
+              }`} />
               </motion.div>
-              <span>{benefit.text}</span>
+              <span className={`transition-colors duration-300 ${
+                isDarkMode ? 'text-base-content' : 'text-base-content'
+              }`}>{benefit.text}</span>
             </motion.div>
           ))}
         </div>
@@ -170,9 +190,11 @@ export default function CTA() {
           >
             <Link
               to="/register"
-              className="btn btn-lg px-10 rounded-2xl flex items-center gap-3 text-white font-semibold 
-                         bg-gradient-to-r from-primary to-secondary shadow-lg 
-                         hover:shadow-xl transition duration-300"
+              className={`btn btn-lg px-10 rounded-2xl flex items-center gap-3 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 ${
+                isDarkMode 
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-500 hover:to-pink-500' 
+                  : 'bg-gradient-to-r from-primary to-secondary text-white'
+              }`}
             >
               <motion.div
                 animate={{ x: [0, 3, 0] }}
@@ -191,9 +213,11 @@ export default function CTA() {
           >
             <Link
               to="/login"
-              className="btn btn-lg px-10 rounded-2xl flex items-center gap-3 font-semibold border 
-                         border-gray-400 text-base-content shadow-sm 
-                         hover:bg-base-100 hover:shadow-md transition duration-300"
+              className={`btn btn-lg px-10 rounded-2xl flex items-center gap-3 font-semibold shadow-sm hover:shadow-md transition-all duration-300 ${
+                isDarkMode 
+                  ? 'border-purple-600 text-purple-400 hover:bg-base-300' 
+                  : 'border-gray-400 text-base-content hover:bg-base-100'
+              } border`}
             >
               <FaSignInAlt /> Login
             </Link>

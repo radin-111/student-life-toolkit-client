@@ -1,8 +1,10 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
+import { useTheme } from "../Context/ThemeContext";
 import Swal from "sweetalert2";
 import Logout from "./Logout";
+import DarkModeToggle from "./DarkModeToggle";
 import {
   FiBook,
   FiCalendar,
@@ -16,6 +18,7 @@ import { FaCode, FaFileAlt } from "react-icons/fa";
 
 const Nav = () => {
   const { user } = useAuth();
+  const { isDarkMode } = useTheme();
   const navigate = useNavigate();
 
   const links = (
@@ -31,7 +34,9 @@ const Nav = () => {
 
   return (
     // https://i.ibb.co.com/s9J7m3XX/image-1.jpg
-    <div className="navbar bg-base-100 lg:px-10 shadow-sm fixed top-0 z-50 ">
+    <div className={`navbar lg:px-10 shadow-sm fixed top-0 z-50 transition-colors duration-300 ${
+      isDarkMode ? 'bg-base-300' : 'bg-base-100'
+    }`}>
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -83,6 +88,9 @@ const Nav = () => {
         </ul>
       </div>
       <div className="navbar-end gap-2">
+        {/* Dark Mode Toggle */}
+        <DarkModeToggle />
+        
         {user && (
           <div className="max-sm:hidden font-semibold">
             <h1>{user?.providerData[0]?.displayName}</h1>

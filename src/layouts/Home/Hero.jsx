@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router';
 import useAuth from "../../hooks/useAuth";
+import { useTheme } from "../../Context/ThemeContext";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -10,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Hero() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isDarkMode } = useTheme();
   const heroRef = useRef(null);
   const particlesRef = useRef(null);
 
@@ -48,17 +50,26 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
   return (
-    <section ref={heroRef} className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white min-h-screen flex items-center relative overflow-hidden">
+    <section 
+      ref={heroRef} 
+      className={`text-white min-h-screen flex items-center relative overflow-hidden transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-800' 
+          : 'bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500'
+      }`}
+    >
       {/* Animated background particles */}
       <div ref={particlesRef} className="absolute inset-0">
         {[...Array(15)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-white rounded-full"
+            className={`absolute w-2 h-2 rounded-full ${
+              isDarkMode ? 'bg-purple-300' : 'bg-white'
+            }`}
             animate={{
               y: [0, -30, 0],
               x: [0, 20, 0],
-              opacity: [0.1, 0.3, 0.1],
+              opacity: isDarkMode ? [0.15, 0.25, 0.15] : [0.1, 0.3, 0.1],
             }}
             transition={{
               duration: 4 + Math.random() * 3,
@@ -91,7 +102,9 @@ export default function Hero() {
 
         {/* Subtext */}
         <motion.p
-          className="text-lg sm:text-xl text-gray-100 max-w-2xl"
+          className={`text-lg sm:text-xl max-w-2xl ${
+            isDarkMode ? 'text-purple-200' : 'text-gray-100'
+          }`}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ 
@@ -118,7 +131,11 @@ export default function Hero() {
           {!user && (
             <motion.button
               onClick={() => navigate("/register")}
-              className="px-8 py-3 rounded-2xl bg-yellow-400 text-gray-900 font-semibold hover:bg-yellow-300 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className={`px-8 py-3 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
+                isDarkMode 
+                  ? 'bg-purple-500 text-gray-900 hover:bg-purple-400' 
+                  : 'bg-yellow-400 text-gray-900 hover:bg-yellow-300'
+              }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { FaQuoteLeft, FaStar, FaUserCircle } from "react-icons/fa";
 import { motion } from 'framer-motion';
+import { useTheme } from "../../Context/ThemeContext";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Testimonials() {
+  const { isDarkMode } = useTheme();
   const testimonialsRef = useRef(null);
   const cardsRef = useRef(null);
 
@@ -100,14 +102,20 @@ export default function Testimonials() {
     <motion.section
       ref={testimonialsRef}
       id="reviews"
-      className="py-20 bg-gradient-to-b from-base-100 to-base-200"
+      className={`py-20 transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gradient-to-b from-base-300 to-base-200' 
+          : 'bg-gradient-to-b from-base-100 to-base-200'
+      }`}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
     >
       <motion.h2 
-        className="text-4xl font-bold text-center mb-14"
+        className={`text-4xl font-bold text-center mb-14 ${
+          isDarkMode ? 'text-base-content' : 'text-base-content'
+        }`}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -122,11 +130,16 @@ export default function Testimonials() {
         {testimonials.map((t, index) => (
           <motion.div
             key={index}
-            className="relative card bg-base-100 border border-gray-200 shadow-xl p-6 
-                       rounded-xl overflow-hidden"
+            className={`relative card shadow-xl p-6 rounded-xl overflow-hidden transition-colors duration-300 ${
+              isDarkMode 
+                ? 'bg-base-100 border-base-300' 
+                : 'bg-base-100 border-gray-200'
+            } border`}
             whileHover={{ 
               y: -8,
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+              boxShadow: isDarkMode
+                ? "0 25px 50px -12px rgba(0, 0, 0, 0.4)"
+                : "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
               transition: { duration: 0.3 }
             }}
           >
@@ -148,23 +161,35 @@ export default function Testimonials() {
                 delay: index * 2
               }}
             >
-              <FaQuoteLeft className="text-3xl text-primary opacity-20" />
+              <FaQuoteLeft className={`text-3xl opacity-20 ${
+                isDarkMode ? 'text-purple-400' : 'text-primary'
+              }`} />
             </motion.div>
             
-            <p className="text-gray-700 mb-6 italic relative z-10">
+            <p className={`mb-6 italic relative z-10 ${
+              isDarkMode ? 'text-base-content/80' : 'text-gray-700'
+            }`}>
               "{t.text}"
             </p>
 
-            <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-200 relative z-10">
+            <div className={`flex items-center gap-3 mt-auto pt-4 border-t relative z-10 ${
+              isDarkMode ? 'border-base-300' : 'border-gray-200'
+            }`}>
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ duration: 0.3 }}
               >
-                <FaUserCircle className="text-4xl text-primary" />
+                <FaUserCircle className={`text-4xl ${
+                  isDarkMode ? 'text-purple-400' : 'text-primary'
+                }`} />
               </motion.div>
               <div>
-                <h3 className="font-semibold">{t.name}</h3>
-                <p className="text-sm text-gray-500">{t.role}</p>
+                <h3 className={`font-semibold ${
+                  isDarkMode ? 'text-base-content' : 'text-base-content'
+                }`}>{t.name}</h3>
+                <p className={`text-sm ${
+                  isDarkMode ? 'text-base-content/60' : 'text-gray-500'
+                }`}>{t.role}</p>
                 <div className="flex text-yellow-500 mt-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <motion.div
