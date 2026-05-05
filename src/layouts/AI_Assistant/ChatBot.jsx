@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AiOutlineSend, AiOutlineUser, AiOutlineRobot } from "react-icons/ai";
 import { FaCopy } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
+import { useLenis, AnimatedPage } from "../../utils/animations";
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
@@ -14,6 +16,9 @@ const ChatBot = () => {
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const messagesEndRef = useRef(null);
+
+  // Initialize smooth scrolling
+  useLenis();
 
   const OPENROUTER_API_KEY = import.meta.env.VITE_QWEN_KEY;
 
@@ -100,79 +105,152 @@ const ChatBot = () => {
   }, [messages, typing]);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-base-100 text-base-content p-4">
-      <div className="flex flex-col w-full max-w-5xl h-full bg-base-100 rounded-xl shadow-lg overflow-hidden border-2 border-base-300">
+    <AnimatedPage className="flex justify-center items-center h-screen bg-base-100 text-base-content p-4">
+      <motion.div 
+        className="flex flex-col w-full max-w-5xl h-full bg-base-100 rounded-xl shadow-lg overflow-hidden border-2 border-base-300"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, duration: 0.6 }}
+      >
         {/* Header */}
-        <div className="flex justify-between items-center bg-base-200 text-base-content p-5 shadow-md rounded-t-xl border-b border-base-300">
-          <h2 className="text-xl font-bold tracking-wide">🤖 HappyBOT</h2>
-          <span className="text-sm opacity-80 italic">AI Assistant</span>
-        </div>
+        <motion.div 
+          className="flex justify-between items-center bg-base-200 text-base-content p-5 shadow-md rounded-t-xl border-b border-base-300"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          <motion.h2 
+            className="text-xl font-bold tracking-wide"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            🤖 HappyBOT
+          </motion.h2>
+          <motion.span 
+            className="text-sm opacity-80 italic"
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            AI Assistant
+          </motion.span>
+        </motion.div>
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-thin scrollbar-thumb-base-300">
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex items-start gap-3 ${
-                msg.sender === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
-              {msg.sender === "bot" && (
-                <div className="p-3 rounded-full bg-primary text-white shadow-md">
-                  <AiOutlineRobot size={22} />
-                </div>
-              )}
-
-              <div
-                className={`px-4 py-3 rounded-2xl max-w-lg shadow-md text-sm md:text-base transition-all duration-200 leading-relaxed whitespace-pre-line ${
-                  msg.sender === "user"
-                    ? "bg-primary text-white rounded-br-none"
-                    : "bg-base-200 text-base-content rounded-bl-none"
+          <AnimatePresence>
+            {messages.map((msg, index) => (
+              <motion.div
+                key={msg.id}
+                className={`flex items-start gap-3 ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
                 }`}
+                initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.1 + index * 0.1, type: "spring", stiffness: 300 }}
               >
-                {parseMessage(msg.text).map((part, idx) =>
-                  part.type === "code" ? (
-                    <div
-                      key={idx}
-                      className="relative bg-base-300 p-2 rounded-lg my-1 overflow-x-auto"
-                    >
-                      <pre className="whitespace-pre-wrap">{part.content}</pre>
-                      <button
-                        onClick={() => handleCopy(part.content)}
-                        className="absolute top-1 right-1 btn btn-xs btn-secondary flex items-center gap-1"
-                      >
-                        <FaCopy size={12} /> Copy
-                      </button>
-                    </div>
-                  ) : (
-                    <span key={idx}>{part.content}</span>
-                  )
+                {msg.sender === "bot" && (
+                  <motion.div 
+                    className="p-3 rounded-full bg-primary text-white shadow-md"
+                    whileHover={{ scale: 1.1, rotate: 10 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <AiOutlineRobot size={22} />
+                  </motion.div>
                 )}
-              </div>
 
-              {msg.sender === "user" && (
-                <div className="p-3 rounded-full bg-primary text-white shadow-md">
-                  <AiOutlineUser size={22} />
-                </div>
-              )}
-            </div>
-          ))}
-          {typing && (
-            <div className="flex items-center gap-2 animate-pulse">
-              <div className="p-3 rounded-full bg-primary text-white">
-                <AiOutlineRobot size={22} />
-              </div>
-              <div className="bg-base-200 text-base-content rounded-2xl px-4 py-2">
-                Typing...
-              </div>
-            </div>
-          )}
+                <motion.div
+                  className={`px-4 py-3 rounded-2xl max-w-lg shadow-md text-sm md:text-base transition-all duration-200 leading-relaxed whitespace-pre-line ${
+                    msg.sender === "user"
+                      ? "bg-primary text-white rounded-br-none"
+                      : "bg-base-200 text-base-content rounded-bl-none"
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  {parseMessage(msg.text).map((part, idx) =>
+                    part.type === "code" ? (
+                      <motion.div
+                        key={idx}
+                        className="relative bg-base-300 p-2 rounded-lg my-1 overflow-x-auto"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 + idx * 0.1 }}
+                      >
+                        <pre className="whitespace-pre-wrap">{part.content}</pre>
+                        <motion.button
+                          onClick={() => handleCopy(part.content)}
+                          className="absolute top-1 right-1 btn btn-xs btn-secondary flex items-center gap-1"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <FaCopy size={12} /> Copy
+                        </motion.button>
+                      </motion.div>
+                    ) : (
+                      <motion.span 
+                        key={idx}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 + idx * 0.05 }}
+                      >
+                        {part.content}
+                      </motion.span>
+                    )
+                  )}
+                </motion.div>
+
+                {msg.sender === "user" && (
+                  <motion.div 
+                    className="p-3 rounded-full bg-primary text-white shadow-md"
+                    whileHover={{ scale: 1.1, rotate: -10 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <AiOutlineUser size={22} />
+                  </motion.div>
+                )}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          
+          <AnimatePresence>
+            {typing && (
+              <motion.div 
+                className="flex items-center gap-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+              >
+                <motion.div 
+                  className="p-3 rounded-full bg-primary text-white"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  <AiOutlineRobot size={22} />
+                </motion.div>
+                <motion.div 
+                  className="bg-base-200 text-base-content rounded-2xl px-4 py-2"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  Typing...
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}
-        <div className="p-5 bg-base-100 flex flex-col md:flex-row gap-3 items-end rounded-b-xl border-t border-base-300">
-          <textarea
+        <motion.div 
+          className="p-5 bg-base-100 flex flex-col md:flex-row gap-3 items-end rounded-b-xl border-t border-base-300"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+        >
+          <motion.textarea
             rows={4}
             placeholder="Type a message..."
             value={input}
@@ -183,16 +261,25 @@ const ChatBot = () => {
               (e.preventDefault(), handleSend())
             }
             className="textarea w-full resize-none focus:ring-2 focus:ring-primary bg-base-200 rounded-xl border border-base-300"
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            whileFocus={{ scale: 1.02 }}
           />
-          <button
+          <motion.button
             onClick={handleSend}
-            className="btn btn-primary px-6 py-2 shadow-md hover:scale-105 transition-transform self-stretch md:self-auto rounded-xl"
+            className="btn btn-primary px-6 py-2 shadow-md self-stretch md:self-auto rounded-xl"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.7 }}
           >
             <AiOutlineSend size={20} />
-          </button>
-        </div>
-      </div>
-    </div>
+          </motion.button>
+        </motion.div>
+      </motion.div>
+    </AnimatedPage>
   );
 };
 

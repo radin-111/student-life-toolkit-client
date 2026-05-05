@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
+import { useLenis, AnimatedPage } from "../../utils/animations";
 
 export default function Timer() {
   const [mode, setMode] = useState("stopwatch"); // "stopwatch" | "countdown"
@@ -14,6 +16,9 @@ export default function Timer() {
       ? new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg")
       : null
   );
+
+  // Initialize smooth scrolling
+  useLenis();
 
   // Stopwatch / Countdown effect
   useEffect(() => {
@@ -84,13 +89,30 @@ export default function Timer() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-base-100 px-4">
-      <div className="card w-full max-w-md shadow-xl bg-base-100 p-6 text-center">
-        <h1 className="text-2xl font-bold mb-4">⏱ Timer</h1>
+    <AnimatedPage className="flex items-center justify-center min-h-screen bg-base-100 px-4">
+      <motion.div 
+        className="card w-full max-w-md shadow-xl bg-base-100 p-6 text-center"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, duration: 0.6 }}
+      >
+        <motion.h1 
+          className="text-2xl font-bold mb-4"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          ⏱ Timer
+        </motion.h1>
 
         {/* Mode Switch */}
-        <div className="flex justify-center gap-4 mb-6">
-          <button
+        <motion.div 
+          className="flex justify-center gap-4 mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          <motion.button
             className={`btn ${
               mode === "stopwatch" ? "btn-primary" : "btn-soft btn-primary"
             }`}
@@ -98,10 +120,12 @@ export default function Timer() {
               resetTimer();
               setMode("stopwatch");
             }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Stopwatch
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             className={`btn ${
               mode === "countdown" ? "btn-primary" : "btn-soft btn-primary"
             }`}
@@ -109,117 +133,237 @@ export default function Timer() {
               resetTimer();
               setMode("countdown");
             }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Countdown
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
 
         {/* Timer Display */}
-        <div className="text-4xl font-mono font-semibold mb-6">
-          {formatTime(time)}
-        </div>
+        <motion.div 
+          className="text-4xl font-mono font-semibold mb-6"
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+        >
+          <motion.span
+            key={time}
+            initial={{ scale: 1.2, rotate: 5 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {formatTime(time)}
+          </motion.span>
+        </motion.div>
 
         {/* Stopwatch Controls */}
-        {mode === "stopwatch" && (
-          <div className="flex flex-wrap justify-center gap-4 mb-4">
-            {!isActive ? (
-              <button
-                className="btn btn-success w-24"
-                onClick={() => setIsActive(true)}
-              >
-                {time === 0 ? "Start" : "Resume"}
-              </button>
-            ) : (
-              <button
-                className="btn btn-warning w-24"
-                onClick={() => setIsActive(false)}
-              >
-                Pause
-              </button>
-            )}
-            <button className="btn btn-error w-24" onClick={resetTimer}>
-              Reset
-            </button>
-            {time > 0 && (
-              <button className="btn btn-info w-24" onClick={addLap}>
-                Lap
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Countdown Controls */}
-        {mode === "countdown" && (
-          <div>
-            <div className="flex justify-center gap-2 mb-4">
-              <input
-                type="number"
-                min="0"
-                placeholder="HH"
-                className="input input-bordered w-20"
-                value={countdownInput.h}
-                onChange={(e) =>
-                  setCountdownInput({ ...countdownInput, h: +e.target.value })
-                }
-              />
-              <input
-                type="number"
-                min="0"
-                placeholder="MM"
-                className="input input-bordered w-20"
-                value={countdownInput.m}
-                onChange={(e) =>
-                  setCountdownInput({ ...countdownInput, m: +e.target.value })
-                }
-              />
-              <input
-                type="number"
-                min="0"
-                placeholder="SS"
-                className="input input-bordered w-20"
-                value={countdownInput.s}
-                onChange={(e) =>
-                  setCountdownInput({ ...countdownInput, s: +e.target.value })
-                }
-              />
-            </div>
-            <div className="flex justify-center gap-4">
+        <AnimatePresence>
+          {mode === "stopwatch" && (
+            <motion.div 
+              className="flex flex-wrap justify-center gap-4 mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
               {!isActive ? (
-                <button
+                <motion.button
                   className="btn btn-success w-24"
-                  onClick={startCountdown}
+                  onClick={() => setIsActive(true)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.6 }}
                 >
-                  Start
-                </button>
+                  {time === 0 ? "Start" : "Resume"}
+                </motion.button>
               ) : (
-                <button
+                <motion.button
                   className="btn btn-warning w-24"
                   onClick={() => setIsActive(false)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
                 >
                   Pause
-                </button>
+                </motion.button>
               )}
-              <button className="btn btn-error w-24" onClick={resetTimer}>
+              <motion.button 
+                className="btn btn-error w-24" 
+                onClick={resetTimer}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.7 }}
+              >
                 Reset
-              </button>
-            </div>
-          </div>
-        )}
+              </motion.button>
+              {time > 0 && (
+                <motion.button 
+                  className="btn btn-info w-24" 
+                  onClick={addLap}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  Lap
+                </motion.button>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Countdown Controls */}
+        <AnimatePresence>
+          {mode === "countdown" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <motion.div 
+                className="flex justify-center gap-2 mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                <motion.input
+                  type="number"
+                  min="0"
+                  placeholder="HH"
+                  className="input input-bordered w-20"
+                  value={countdownInput.h}
+                  onChange={(e) =>
+                    setCountdownInput({ ...countdownInput, h: +e.target.value })
+                  }
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.7 }}
+                  whileFocus={{ scale: 1.05 }}
+                />
+                <motion.input
+                  type="number"
+                  min="0"
+                  placeholder="MM"
+                  className="input input-bordered w-20"
+                  value={countdownInput.m}
+                  onChange={(e) =>
+                    setCountdownInput({ ...countdownInput, m: +e.target.value })
+                  }
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.75 }}
+                  whileFocus={{ scale: 1.05 }}
+                />
+                <motion.input
+                  type="number"
+                  min="0"
+                  placeholder="SS"
+                  className="input input-bordered w-20"
+                  value={countdownInput.s}
+                  onChange={(e) =>
+                    setCountdownInput({ ...countdownInput, s: +e.target.value })
+                  }
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  whileFocus={{ scale: 1.05 }}
+                />
+              </motion.div>
+              <motion.div 
+                className="flex justify-center gap-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9 }}
+              >
+                {!isActive ? (
+                  <motion.button
+                    className="btn btn-success w-24"
+                    onClick={startCountdown}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 1.0 }}
+                  >
+                    Start
+                  </motion.button>
+                ) : (
+                  <motion.button
+                    className="btn btn-warning w-24"
+                    onClick={() => setIsActive(false)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  >
+                    Pause
+                  </motion.button>
+                )}
+                <motion.button 
+                  className="btn btn-error w-24" 
+                  onClick={resetTimer}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 1.1 }}
+                >
+                  Reset
+                </motion.button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Lap History */}
-        {mode === "stopwatch" && laps.length > 0 && (
-          <div className="mt-6 text-left">
-            <h2 className="font-semibold mb-2">Lap Times:</h2>
-            <ul className="space-y-1">
-              {laps.map((lap, i) => (
-                <li key={i} className="p-2 rounded bg-base-200">
-                  Lap {i + 1}: {lap}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    </div>
+        <AnimatePresence>
+          {mode === "stopwatch" && laps.length > 0 && (
+            <motion.div 
+              className="mt-6 text-left"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <motion.h2 
+                className="font-semibold mb-2"
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                Lap Times:
+              </motion.h2>
+              <motion.ul 
+                className="space-y-1"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+              >
+                {laps.map((lap, i) => (
+                  <motion.li 
+                    key={i} 
+                    className="p-2 rounded bg-base-200"
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.8 + i * 0.1 }}
+                    whileHover={{ scale: 1.02, x: 5 }}
+                  >
+                    Lap {i + 1}: {lap}
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </AnimatedPage>
   );
 }
