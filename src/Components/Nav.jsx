@@ -21,10 +21,10 @@ const Nav = () => {
   const links = (
     <>
       <li>
-        <a href={"#features"}>Features</a>
+        <a href={"/#features"}>Features</a>
       </li>
       <li>
-        <a href={"#reviews"}>Reviews</a>
+        <a href={"/#reviews"}>Reviews</a>
       </li>
     </>
   );

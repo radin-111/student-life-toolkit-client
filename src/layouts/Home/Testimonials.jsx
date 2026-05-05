@@ -1,6 +1,44 @@
+import React, { useEffect, useRef } from 'react';
 import { FaQuoteLeft, FaStar, FaUserCircle } from "react-icons/fa";
+import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Testimonials() {
+  const testimonialsRef = useRef(null);
+  const cardsRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Cards stagger animation on scroll
+      if (cardsRef.current) {
+        gsap.fromTo(cardsRef.current.children,
+          {
+            opacity: 0,
+            y: 80,
+            scale: 0.9
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: cardsRef.current,
+              start: "top 85%",
+              once: true
+            }
+          }
+        );
+      }
+    }, testimonialsRef);
+
+    return () => ctx.revert();
+  }, []);
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -59,48 +97,96 @@ export default function Testimonials() {
   ];
 
   return (
-    <section
+    <motion.section
+      ref={testimonialsRef}
       id="reviews"
       className="py-20 bg-gradient-to-b from-base-100 to-base-200"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
     >
-      <h2 className="text-4xl font-bold text-center mb-14">
+      <motion.h2 
+        className="text-4xl font-bold text-center mb-14"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
         What Students Say
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto px-6">
+      </motion.h2>
+      <div 
+        ref={cardsRef}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto px-6"
+      >
         {testimonials.map((t, index) => (
-          <div
+          <motion.div
             key={index}
             className="relative card bg-base-100 border border-gray-200 shadow-xl p-6 
-                       hover:shadow-2xl hover:-translate-y-2 transition duration-300 
                        rounded-xl overflow-hidden"
+            whileHover={{ 
+              y: -8,
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+              transition: { duration: 0.3 }
+            }}
           >
             {/* Gradient border effect */}
-            <div
+            <motion.div
               className="absolute inset-0 rounded-xl border-2 border-transparent 
                             bg-gradient-to-r from-primary to-secondary opacity-0 
                             hover:opacity-100 transition duration-500 pointer-events-none"
+              whileHover={{ opacity: 1 }}
             />
 
-            <FaQuoteLeft className="text-3xl text-primary opacity-20 absolute top-4 left-4" />
+            <motion.div
+              className="absolute top-4 left-4"
+              animate={{ rotate: 360 }}
+              transition={{ 
+                duration: 20, 
+                repeat: Infinity, 
+                ease: "linear",
+                delay: index * 2
+              }}
+            >
+              <FaQuoteLeft className="text-3xl text-primary opacity-20" />
+            </motion.div>
+            
             <p className="text-gray-700 mb-6 italic relative z-10">
-              “{t.text}”
+              "{t.text}"
             </p>
 
             <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-200 relative z-10">
-              <FaUserCircle className="text-4xl text-primary" />
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <FaUserCircle className="text-4xl text-primary" />
+              </motion.div>
               <div>
                 <h3 className="font-semibold">{t.name}</h3>
                 <p className="text-sm text-gray-500">{t.role}</p>
                 <div className="flex text-yellow-500 mt-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <FaStar key={i} />
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                      whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                      transition={{ 
+                        delay: 0.3 + i * 0.1,
+                        type: "spring",
+                        stiffness: 200
+                      }}
+                      viewport={{ once: true }}
+                    >
+                      <FaStar />
+                    </motion.div>
                   ))}
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }

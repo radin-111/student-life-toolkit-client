@@ -1,10 +1,9 @@
 import axios from "axios";
-import React from "react";
 import useAuth from "./useAuth";
 import { useNavigate } from "react-router";
 
 const instance = axios.create({
-  baseURL: "https://student-life-toolkit-server.vercel.app",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 const useAxios = () => {

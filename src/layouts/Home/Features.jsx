@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from 'react';
 import {
   FiCalendar,
   FiPieChart,
@@ -8,8 +9,45 @@ import {
   FiCode,
   FiFileText,
 } from "react-icons/fi";
+import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Features() {
+  const featuresRef = useRef(null);
+  const cardsRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Cards entrance animation on scroll
+      if (cardsRef.current) {
+        gsap.fromTo(cardsRef.current.children,
+          {
+            opacity: 0,
+            y: 60,
+            scale: 0.9
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: cardsRef.current,
+              start: "top 85%",
+              once: true
+            }
+          }
+        );
+      }
+    }, featuresRef);
+
+    return () => ctx.revert();
+  }, []);
   const features = [
     {
       title: "Class Tracker",
@@ -54,20 +92,41 @@ export default function Features() {
   ];
 
   return (
-    <section className="py-20 bg-base-100" id="features">
-      <h2 className="text-4xl font-bold text-center mb-14">
+    <section ref={featuresRef} className="py-20 bg-base-100" id="features">
+      <motion.h2 
+        className="text-4xl font-bold text-center mb-14"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
         Everything You Need in One App
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto px-6">
+      </motion.h2>
+      <div 
+        ref={cardsRef}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto px-6"
+      >
         {features.map((feature, index) => (
-          <div
+          <motion.div
             key={index}
-            className="card bg-base-200 shadow-xl p-8 flex flex-col items-center text-center transform hover:scale-105 transition duration-300"
+            className="card bg-base-200 shadow-xl p-8 flex flex-col items-center text-center rounded-xl"
+            whileHover={{ 
+              scale: 1.03, 
+              y: -5,
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+            }}
+            transition={{ duration: 0.3 }}
           >
-            <div className="mb-4">{feature.icon}</div>
+            <motion.div 
+              className="mb-4"
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.6 }}
+            >
+              {feature.icon}
+            </motion.div>
             <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
             <p className="text-sm text-gray-600">{feature.desc}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>
