@@ -4,6 +4,7 @@ import Home from "../layouts/Home/Home";
 import Error from "../Components/Error";
 import Login from "../layouts/Login/Login";
 import Register from "../layouts/Register/Register";
+import ForgotPassword from "../layouts/ForgotPassword/ForgotPassword";
 import Dashboard from "../Components/Dashboard";
 import Private from "../Context/Private";
 import AddClassForm from "../Components/AddClassForm";
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: "register",
         element: <Register></Register>,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword></ForgotPassword>,
       },
     ],
   },
